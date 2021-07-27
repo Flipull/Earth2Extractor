@@ -4,14 +4,16 @@ using Earth2ExtractorCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Earth2ExtractorCore.Migrations
 {
     [DbContext(typeof(E2DB))]
-    partial class E2DBModelSnapshot : ModelSnapshot
+    [Migration("20210727163507_time")]
+    partial class time
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

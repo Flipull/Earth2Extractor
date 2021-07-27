@@ -26,9 +26,22 @@ namespace E2ExCoreLibrary.Model
         public string id { get; set; }
         public Decimal price { get; set; }
 
-        [Column(TypeName="DateTime")]
+        [StringLength(36)]
         public string time { get; set; }
-
+        
+        
+        [NotMapped]
+        public DateTime moment { 
+            get
+            {
+                return DateTime.Parse(time);
+            }
+            set
+            {
+                time = value.ToString("MM/dd/yyyy hh:mm:ss");
+            }
+        }
+            
         [NotMapped]
         public User owner { get; set; }
         public string ownerId { 

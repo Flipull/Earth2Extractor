@@ -12,8 +12,10 @@ namespace Earth2ExtractorCore
         public virtual DbSet<User> Users { get; set; }
         public virtual DbSet<LandField> LandFields { get; set; }
         public virtual DbSet<LandFieldTransactions> Transactions { get; set; }
+
+        public virtual DbSet<SimpleData> Simpletons { get; set; }
         
-        
+
         public E2DB() : base()
         {
             
