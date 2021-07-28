@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Earth2ExtractorCore.Migrations
 {
     [DbContext(typeof(E2DB))]
-    [Migration("20210726111356_second")]
-    partial class second
+    [Migration("20210727230003_ForReal")]
+    partial class ForReal
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -44,14 +44,14 @@ namespace Earth2ExtractorCore.Migrations
                         .HasMaxLength(36)
                         .HasColumnType("nvarchar(36)");
 
-                    b.Property<string>("LandFieldid")
+                    b.Property<string>("landFieldid")
                         .HasColumnType("nvarchar(36)");
 
                     b.Property<string>("ownerId")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("previousOwnerId")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<decimal>("price")
                         .HasColumnType("decimal(18,2)");
@@ -62,9 +62,48 @@ namespace Earth2ExtractorCore.Migrations
 
                     b.HasKey("id");
 
-                    b.HasIndex("LandFieldid");
+                    b.HasIndex("landFieldid");
+
+                    b.HasIndex("ownerId");
+
+                    b.HasIndex("previousOwnerId");
 
                     b.ToTable("Transactions");
+                });
+
+            modelBuilder.Entity("E2ExCoreLibrary.Model.SimpleData", b =>
+                {
+                    b.Property<string>("userid")
+                        .HasMaxLength(36)
+                        .HasColumnType("nvarchar(36)");
+
+                    b.Property<DateTime>("momenta")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("currentPropertiesOwned")
+                        .HasColumnType("int");
+
+                    b.Property<decimal>("profitsOnSell")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<double>("returnsOnSell")
+                        .HasColumnType("float");
+
+                    b.Property<int>("tilesBoughtAmount")
+                        .HasColumnType("int");
+
+                    b.Property<int>("tilesSoldAmount")
+                        .HasColumnType("int");
+
+                    b.Property<int>("totalPropertiesOwned")
+                        .HasColumnType("int");
+
+                    b.Property<int>("totalPropertiesResold")
+                        .HasColumnType("int");
+
+                    b.HasKey("userid", "momenta");
+
+                    b.ToTable("Simpletons");
                 });
 
             modelBuilder.Entity("E2ExCoreLibrary.Model.User", b =>
@@ -72,6 +111,9 @@ namespace Earth2ExtractorCore.Migrations
                     b.Property<string>("Id")
                         .HasMaxLength(36)
                         .HasColumnType("nvarchar(36)");
+
+                    b.Property<bool>("locked")
+                        .HasColumnType("bit");
 
                     b.Property<string>("name")
                         .HasColumnType("nvarchar(max)");
@@ -86,9 +128,11 @@ namespace Earth2ExtractorCore.Migrations
 
             modelBuilder.Entity("E2ExCoreLibrary.Model.LandFieldTransactions", b =>
                 {
-                    b.HasOne("E2ExCoreLibrary.Model.LandField", null)
+                    b.HasOne("E2ExCoreLibrary.Model.LandField", "landField")
                         .WithMany("transactionSet")
-                        .HasForeignKey("LandFieldid");
+                        .HasForeignKey("landFieldid");
+
+                    b.Navigation("landField");
                 });
 
             modelBuilder.Entity("E2ExCoreLibrary.Model.LandField", b =>

@@ -55,6 +55,8 @@ namespace E2ExCoreLibrary.Model
             get { return previousOwner?.Id; }
             set { previousOwner = new User { Id = value }; }
         }
+
+        public virtual LandField landField { get; set; }
     }
 
     public class LandFieldBids
