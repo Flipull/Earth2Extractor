@@ -17,6 +17,7 @@ namespace E2ExCoreLibrary.Model
         
         public int tilesSoldAmount { get; set; }
         public int tilesBoughtAmount { get; set; }
+        public int tilesCurrentlyOwned { get; set; }
         public int totalPropertiesOwned { get; set; }
         public int totalPropertiesResold { get; set; }
         public int currentPropertiesOwned { get; set; }
