@@ -1,5 +1,148 @@
 ﻿@page "/"
+@using WebsiteCoreBlazor.Data
+@inject SimpleStatsService StatsService
 
-<h1>Hello, world!</h1>
 
-Welcome to your new app.
+<button class="btn btn-primary" @onclick="GetPortfolioSize"></button>
+<button class="btn btn-primary" @onclick="GetPortfolioWeight"></button>
+
+<button class="btn btn-primary" @onclick="GetBears"></button>
+<button class="btn btn-primary" @onclick="GetBulls"></button>
+
+<button class="btn btn-primary" @onclick="GetSellouts"></button>
+<button class="btn btn-primary" @onclick="GetHodlers"></button>
+
+
+<button class="btn btn-primary" @onclick="GetUnicorns"></button>
+
+
+<button class="btn btn-primary" @onclick="GetFishers"></button>
+<button class="btn btn-primary" @onclick="GetDrawers"></button>
+
+<button class="btn btn-primary" @onclick="GetChasers"></button>
+<button class="btn btn-primary" @onclick="GetShimmers"></button>
+
+
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>User</th>
+            @if (busy)
+            {
+                <th>unknown</th>
+            }
+            else
+            {
+                <th>@header_name</th>
+            }
+        </tr>
+    </thead>
+    <tbody>
+        @if (busy)
+        {
+            <tr><td><em>Loading...</em></td></tr>
+        }
+        else
+        {
+            @foreach (var data in results)
+            {
+                <tr>
+                    <td>@data.user.Id</td>
+                    <td>@data.datavalue</td>
+                </tr>
+            }
+        }
+    </tbody>
+</table>
+
+
+
+@code {
+    bool busy = true;
+
+    string header_name = "unknown";
+    List<SimpleStatsViewModel> results = null;
+
+
+
+    void GetPortfolioSize()
+    {
+        busy = true;
+        header_name = "Portfolio Size";
+        results = StatsService.GetPortfolioSize();
+        busy = false;
+    }
+    void GetPortfolioWeight()
+    {
+        busy = true;
+        header_name = "Portfolio Weight";
+        results = StatsService.GetPortfolioWeight();
+        busy = false;
+    }
+
+    void GetBears()
+    {
+        busy = true;
+        header_name = "Bears";
+        results = StatsService.GetBearStats();
+        busy = false;
+    }
+    void GetBulls()
+    {
+        busy = true;
+        header_name = "Bulls";
+        results = StatsService.GetBullStats();
+        busy = false;
+    }
+    void GetSellouts()
+    {
+        busy = true;
+        header_name = "Sellouts";
+        results = StatsService.GetSelloutStats();
+        busy = false;
+    }
+    void GetHodlers()
+    {
+        busy = true;
+        header_name = "Hodlers";
+        results = StatsService.GetHodlerStats();
+        busy = false;
+    }
+    void GetUnicorns()
+    {
+        busy = true;
+        header_name = "Unicorns";
+
+        busy = false;
+    }
+    void GetFishers()
+    {
+        busy = true;
+        header_name = "Bottom Fishers";
+        results = StatsService.GetFishStats();
+        busy = false;
+    }
+    void GetDrawers()
+    {
+        busy = true;
+        header_name = "Top drawers";
+        results = StatsService.GetDrawerStats();
+        busy = false;
+    }
+    void GetChasers()
+    {
+        busy = true;
+        header_name = "Chasers";
+        results = StatsService.GetChaserStats();
+        busy = false;
+    }
+    void GetShimmers()
+    {
+        busy = true;
+        header_name = "Shimmers";
+        results = StatsService.GetShimmerStats();
+        busy = false;
+    }
+
+}
