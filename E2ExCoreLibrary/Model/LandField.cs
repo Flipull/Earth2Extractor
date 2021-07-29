@@ -44,12 +44,16 @@ namespace E2ExCoreLibrary.Model
             
         [NotMapped]
         public User owner { get; set; }
+
+        [StringLength(36, MinimumLength = 36)]
         public string ownerId { 
             get { return owner?.Id; }
             set { owner = new User { Id = value }; } 
         }
         [NotMapped]
         public User previousOwner { get; set; }
+
+        [StringLength(36, MinimumLength = 36)]
         public string previousOwnerId
         {
             get { return previousOwner?.Id; }
