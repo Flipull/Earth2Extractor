@@ -13,7 +13,38 @@ namespace E2ExCoreLibrary
         static string LB_URL = "https://app.earth2.io/leaderboards/player?";
         static string MP_URL = "https://app.earth2.io/marketplace?";
         static string QL_URL = "https://app.earth2.io/graphql?";
+        static string USR_URL = "https://app.earth2.io/api/v2/user_info/";
 
+
+        static public User ReadUser(string id)
+        {
+            string json = string.Empty;
+            string query = USR_URL + id;
+
+            HttpWebRequest request =
+                (HttpWebRequest)WebRequest.Create(query); //Uri.EscapeUriString(query));
+            request.AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate;
+            //request.Headers.Add("Content-Transfer-Encoding", "binary");
+
+            bool success = false;
+            while (!success)
+            {
+                try
+                {
+                    using (HttpWebResponse response = (HttpWebResponse)request.GetResponse())
+                    using (Stream stream = response.GetResponseStream())
+                    using (StreamReader reader = new StreamReader(stream))
+                        json = reader.ReadToEnd();
+                }
+                catch (System.Net.WebException e)
+                {
+                    System.Threading.Thread.Sleep(5000);
+                }
+                finally { success = true; }
+            }
+
+            return JsonConvert.DeserializeObject<User>(json);
+        }
         static public LandField ReadLandField(string id)
         {
             string json = string.Empty;
@@ -50,18 +81,6 @@ namespace E2ExCoreLibrary
             //Console.WriteLine(result);
 
             return result;
-        }
-
-        static public List<User> OBSOLETE_ReadAllLeaderboardUsers()
-        {
-            List<User> results = new List<User>();
-
-            foreach (string c in Constants.Countries)
-            {
-                results.AddRange(ReadLeaderboardUsers(c, "networth"));
-                results.AddRange(ReadLeaderboardUsers(c, "tiles"));
-            }
-            return results;
         }
         static public List<User> ReadLeaderboardUsers(string country = "", string sort = "")
         {
