@@ -338,3 +338,7 @@ ASALocalRun/
 
 # BeatPulse healthcheck temp database
 healthchecksdb
+/Earth2ExtractorCore/Migrations/20210729135402_v1.cs
+/Earth2ExtractorCore/Migrations/20210729135402_v1.Designer.cs
+/Earth2ExtractorCore/Migrations/20210729201353_v2.cs
+/Earth2ExtractorCore/Migrations/20210729201353_v2.Designer.cs
