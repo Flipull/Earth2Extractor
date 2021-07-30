@@ -54,12 +54,23 @@ namespace WebsiteCoreBlazor.Data
             return n.ToString("N2");
         }
 
+        public List<DateTime> GetMomenta()
+        {
+            E2DB db = new E2DB();
+            return db.Simpletons.Select(d => d.momenta)
+                                .Distinct()
+                                .AsEnumerable()
+                                .OrderBy(d=>d.Ticks)
+                                .ToList();
+        }
+
+
 
         private List<SimpleStatsViewModel> GetTop100(IQueryable<SimpleStatsViewModel> q)
         {
             return q.Take(100).ToList();
         }
-        public List<SimpleStatsViewModel> GetPortfolioSize()
+        public List<SimpleStatsViewModel> GetPortfolioSize(DateTime moment)
         {
             E2DB db = new E2DB();
             var q =
@@ -67,6 +78,7 @@ namespace WebsiteCoreBlazor.Data
                 join user in db.Users
                 on data.userid equals user.Id
                 where data.totalPropertiesOwned > 0
+                    && data.momenta == moment
                 orderby data.currentPropertiesOwned descending
                 select new SimpleStatsViewModel
                 {
@@ -76,7 +88,7 @@ namespace WebsiteCoreBlazor.Data
             return GetTop100(q);
         }
 
-        public List<SimpleStatsViewModel> GetPortfolioWeight()
+        public List<SimpleStatsViewModel> GetPortfolioWeight(DateTime moment)
         {
             E2DB db = new E2DB();
             var q =
@@ -85,6 +97,7 @@ namespace WebsiteCoreBlazor.Data
                 on data.userid equals user.Id
                 let port_weight = data.tilesCurrentlyOwned / (float)data.totalPropertiesOwned
                 where data.totalPropertiesOwned > 25
+                    && data.momenta == moment
                 orderby port_weight descending
                 select new SimpleStatsViewModel
                 {
@@ -94,7 +107,7 @@ namespace WebsiteCoreBlazor.Data
             return GetTop100(q);
         }
 
-        public List<SimpleStatsViewModel> GetBearStats()
+        public List<SimpleStatsViewModel> GetBearStats(DateTime moment)
         {
             E2DB db = new E2DB();
             var q =
@@ -103,6 +116,7 @@ namespace WebsiteCoreBlazor.Data
                 on data.userid equals user.Id
                 let bear_bull = (float)data.tilesSoldAmount / data.tilesBoughtAmount
                 where data.tilesBoughtAmount > 25000 || data.totalPropertiesOwned > 400
+                    && data.momenta == moment
                 orderby bear_bull descending, data.tilesBoughtAmount descending
                 select new SimpleStatsViewModel
                 {
@@ -113,7 +127,7 @@ namespace WebsiteCoreBlazor.Data
             return GetTop100(q);
         }
 
-        public List<SimpleStatsViewModel> GetBullStats()
+        public List<SimpleStatsViewModel> GetBullStats(DateTime moment)
         {
             E2DB db = new E2DB();
             var top =
@@ -128,6 +142,7 @@ namespace WebsiteCoreBlazor.Data
                 on data.userid equals user.Id
                 let bear_bull = (float)data.tilesSoldAmount / data.tilesBoughtAmount
                 where data.tilesBoughtAmount > 25000 || data.totalPropertiesOwned > 400
+                    && data.momenta == moment
                 orderby bear_bull ascending, data.tilesBoughtAmount descending
                 select new SimpleStatsViewModel
                 {
@@ -138,7 +153,7 @@ namespace WebsiteCoreBlazor.Data
             return GetTop100(q);
         }
 
-        public List<SimpleStatsViewModel> GetSelloutStats()
+        public List<SimpleStatsViewModel> GetSelloutStats(DateTime moment)
         {
             E2DB db = new E2DB();
             var q =
@@ -146,6 +161,8 @@ namespace WebsiteCoreBlazor.Data
                 join user in db.Users
                 on data.userid equals user.Id
                 let sellout_hodler = data.tilesCurrentlyOwned - data.tilesSoldAmount
+                where true
+                    && data.momenta == moment
                 orderby sellout_hodler ascending
                 select new SimpleStatsViewModel
                 {
@@ -155,7 +172,7 @@ namespace WebsiteCoreBlazor.Data
             return GetTop100(q);
         }
 
-        public List<SimpleStatsViewModel> GetHodlerStats()
+        public List<SimpleStatsViewModel> GetHodlerStats(DateTime moment)
         {
             E2DB db = new E2DB();
             var q =
@@ -163,6 +180,8 @@ namespace WebsiteCoreBlazor.Data
                 join user in db.Users
                 on data.userid equals user.Id
                 let sellout_hodler = data.tilesCurrentlyOwned - data.tilesSoldAmount
+                where true
+                    && data.momenta == moment
                 orderby sellout_hodler descending
                 select new SimpleStatsViewModel
                 {
@@ -173,7 +192,7 @@ namespace WebsiteCoreBlazor.Data
         }
 
 
-        public List<SimpleStatsViewModel> GetUnicornStats()
+        public List<SimpleStatsViewModel> GetUnicornStats(DateTime moment)
         {
             E2DB db = new E2DB();
             var q =
@@ -181,16 +200,18 @@ namespace WebsiteCoreBlazor.Data
                 join user in db.Users
                 on data.userid equals user.Id
                 let unicorn = data.profitsOnSell
+                where true
+                    && data.momenta == moment
                 orderby unicorn descending
                 select new SimpleStatsViewModel
                 {
                     user = user,
-                    datavalue = formatBigNumbers(unicorn)
+                    datavalue = "$ " + formatBigNumbers(unicorn)
                 };
             return GetTop100(q);
         }
 
-        public List<SimpleStatsViewModel> GetFishStats()
+        public List<SimpleStatsViewModel> GetFishStats(DateTime moment)
         {
             E2DB db = new E2DB();
             var q =
@@ -199,6 +220,7 @@ namespace WebsiteCoreBlazor.Data
                 on data.userid equals user.Id
                 let fish_drawer = (float) data.profitsOnSell / (float)data.totalPropertiesResold
                 where data.totalPropertiesResold > 200
+                    && data.momenta == moment
                 orderby fish_drawer descending
                 select new SimpleStatsViewModel
                 {
@@ -208,7 +230,7 @@ namespace WebsiteCoreBlazor.Data
             return GetTop100(q);
         }
 
-        public List<SimpleStatsViewModel> GetDrawerStats()
+        public List<SimpleStatsViewModel> GetDrawerStats(DateTime moment)
         {
             E2DB db = new E2DB();
             var q =
@@ -217,6 +239,7 @@ namespace WebsiteCoreBlazor.Data
                 on data.userid equals user.Id
                 let fish_drawer = (float)data.profitsOnSell / (float)data.totalPropertiesResold
                 where data.totalPropertiesResold > 200
+                    && data.momenta == moment
                 orderby fish_drawer ascending
                 select new SimpleStatsViewModel
                 {
@@ -226,7 +249,7 @@ namespace WebsiteCoreBlazor.Data
             return GetTop100(q);
         }
 
-        public List<SimpleStatsViewModel> GetChaserStats()
+        public List<SimpleStatsViewModel> GetChaserStats(DateTime moment)
         {
             E2DB db = new E2DB();
             var q =
@@ -236,6 +259,7 @@ namespace WebsiteCoreBlazor.Data
                 let ret_ret = data.returnsOnSell / data.totalPropertiesResold
                 let resoldratio = data.totalPropertiesResold / (float)data.totalPropertiesOwned
                 where data.totalUniquePropertiesOwned >= 150 && data.totalPropertiesResold >= 50
+                    && data.momenta == moment
                 orderby ret_ret descending
                 select new SimpleStatsViewModel
                 {
@@ -245,7 +269,7 @@ namespace WebsiteCoreBlazor.Data
             return GetTop100(q);
         }
 
-        public List<SimpleStatsViewModel> GetShimmerStats()
+        public List<SimpleStatsViewModel> GetShimmerStats(DateTime moment)
         {
             E2DB db = new E2DB();
             var q =
@@ -255,6 +279,7 @@ namespace WebsiteCoreBlazor.Data
                 let ret_ret = data.returnsOnSell / data.totalPropertiesResold
                 let resoldratio = data.totalPropertiesResold / (float)data.totalPropertiesOwned
                 where data.totalUniquePropertiesOwned >= 150 && data.totalPropertiesResold >= 50
+                    && data.momenta == moment
                 orderby ret_ret ascending
                 select new SimpleStatsViewModel
                 {
@@ -265,7 +290,7 @@ namespace WebsiteCoreBlazor.Data
         }
 
 
-        public List<SimpleStatsViewModel> COMPLETETESTGETMETHOD()
+        public List<SimpleStatsViewModel> COMPLETETESTGETMETHOD(DateTime moment)
         {
             E2DB db = new E2DB();
             var q =
@@ -279,7 +304,8 @@ namespace WebsiteCoreBlazor.Data
                 let ret_ret = data.returnsOnSell / data.totalPropertiesResold
 
                 let resoldratio = data.totalPropertiesResold / (float)data.totalPropertiesOwned
-                //where ???????????
+                where true
+                    && data.momenta == moment
                 orderby bear_bull ascending
                 select new SimpleStatsViewModel
                 {

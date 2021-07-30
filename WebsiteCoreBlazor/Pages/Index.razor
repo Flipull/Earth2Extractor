@@ -2,24 +2,46 @@
 @using WebsiteCoreBlazor.Data
 @inject SimpleStatsService StatsService
 
-    <tools>
-        <button class="btn btn-primary" @onclick="GetPortfolioSize"></button>
-        <button class="btn btn-primary" @onclick="GetPortfolioWeight"></button>
-        <spacer />
-        <button class="btn btn-primary" @onclick="GetBears"></button>
-        <button class="btn btn-primary" @onclick="GetBulls"></button>
-        <spacer />
-        <button class="btn btn-primary" @onclick="GetSellouts"></button>
-        <button class="btn btn-primary" @onclick="GetHodlers"></button>
-        <spacer />
-        <button class="btn btn-primary" @onclick="GetUnicorns"></button>
-        <spacer />
-        <button class="btn btn-primary" @onclick="GetFishers"></button>
-        <button class="btn btn-primary" @onclick="GetDrawers"></button>
-        <spacer />
-        <button class="btn btn-primary" @onclick="GetChasers"></button>
-        <button class="btn btn-primary" @onclick="GetShimmers"></button>
-    </tools>
+<tools>
+    <button class="btn btn-primary@( (selected == 0) ? " selectia":"")"
+            
+            @onclick="GetPortfolioSize"></button>
+    <button class="btn btn-primary@( (selected == 1) ? " selectia":"")"
+            
+            @onclick="GetPortfolioWeight"></button>
+    <spacer />
+    <button class="btn btn-primary@( (selected == 2) ? " selectia":"")"
+            
+            @onclick="GetBears"></button>
+    <button class="btn btn-primary@( (selected == 3) ? " selectia":"")"
+            
+            @onclick="GetBulls"></button>
+    <spacer />
+    <button class="btn btn-primary@( (selected == 4) ? " selectia":"")"
+            
+            @onclick="GetSellouts"></button>
+    <button class="btn btn-primary@( (selected == 5) ? " selectia":"")"
+            
+            @onclick="GetHodlers"></button>
+    <spacer />
+    <button class="btn btn-primary@( (selected == 6) ? " selectia":"")"
+            
+            @onclick="GetUnicorns"></button>
+    <spacer />
+    <button class="btn btn-primary@( (selected == 7) ? " selectia":"")"
+            
+            @onclick="GetFishers"></button>
+    <button class="btn btn-primary@( (selected == 8) ? " selectia":"")"
+            
+            @onclick="GetDrawers"></button>
+    <spacer />
+    <button class="btn btn-primary@( (selected == 9) ? " selectia":"")"
+            
+            @onclick="GetChasers"></button>
+    <button class="btn btn-primary@( (selected == 10) ? " selectia":"")"
+            
+            @onclick="GetShimmers"></button>
+</tools>
 
 
 <table class="corpus">
@@ -50,9 +72,22 @@
             <td class="user">
                 <a class="link" href="https://app.earth2.io/#profile/@results[i].user.Id">
 
-                    <div class="rank">@if( (i+1)%10==0 || (i+1)<=3 ){ @(i+1); }</div>
+                    <div class="rank">
+                    @if( (i+1)%10==0 || i+1<=3) {
+                        if (i+1<=3) {
+                        <img class="toprank" src="/icons/@(i+1).png" width="96" height="96"/>
+                        } else {
+                        <span>@(i+1)</span>;
+                        }
+                    }</div>
                     <img class="photo" src="@results[i].user.customPhoto" width="48" height="48" />
-                    <div class="name">@results[i].user.name</div>
+                    <div class="name">
+                        @if (!string.IsNullOrEmpty(results[i].user.name) ) {
+                            @results[i].user.name;
+                        } else {
+                            @("- missing name -");
+                    }
+                    </div>
                     <div class="data">@results[i].datavalue</div>
                 </a>
             </td>
@@ -61,102 +96,138 @@
         }
     </tbody>
 </table>
-<br />
 
+<div class="ciliary">
+    <div class="header">
+        Ciliary
+    </div>
+    <memo>
+        E2 API Service:
+        <io>
+            Online
+        </io>
+    </memo>
+    <memo>
+        Last updated:
+        <io>
+            @momenta[0].ToString("dd MMMM yyyy")
+        </io>
+    </memo>
+    <memo>
+        Stat Collector:
+        <io>
+            Pending
+        </io>
+    </memo>
+</div>    
 
-@code {
-    bool busy = true;
+    @code {
+        bool busy = true;
+        int selected = 0;
 
-    string header_name = "unknown";
-    string header_descr = @"Some description, this is for a test.
-                            Test test test<h1>test</h1>";
-    List<SimpleStatsViewModel> results = null;
+        List<DateTime> momenta = null;
+        string header_name = "unknown";
+        string header_descr = @"Some description, this is for a test.
+                            Test test test<h1>test</h1> ;//TODO test js/css/html-manip-funcs";
+        List<SimpleStatsViewModel> results = null;
 
-    protected override async Task OnInitializedAsync()
-    {
-        busy = true;
-        header_name = "Portfolio Size";
-        results = StatsService.GetPortfolioSize();
-        busy = false;
-    }
-    void GetPortfolioSize()
-    {
-        busy = true;
-        header_name = "Portfolio Size";
-        results = StatsService.GetPortfolioSize();
-        busy = false;
-    }
-    void GetPortfolioWeight()
-    {
-        busy = true;
-        header_name = "Portfolio Weight";
-        results = StatsService.GetPortfolioWeight();
-        busy = false;
-    }
+        protected override async Task OnInitializedAsync()
+        {
+            //get dates
+            momenta = StatsService.GetMomenta();
 
-    void GetBears()
-    {
-        busy = true;
-        header_name = "Bears";
-        results = StatsService.GetBearStats();
-        busy = false;
-    }
-    void GetBulls()
-    {
-        busy = true;
-        header_name = "Bulls";
-        results = StatsService.GetBullStats();
-        busy = false;
-    }
-    void GetSellouts()
-    {
-        busy = true;
-        header_name = "Sellouts";
-        results = StatsService.GetSelloutStats();
-        foreach(var result in results) result.datavalue = result.datavalue.Substring(1); 
-        busy = false;
-    }
-    void GetHodlers()
-    {
-        busy = true;
-        header_name = "Hodlers";
-        results = StatsService.GetHodlerStats();
-        busy = false;
-    }
-    void GetUnicorns()
-    {
-        busy = true;
-        header_name = "Unicorns";
-        results = StatsService.GetUnicornStats();
-        busy = false;
-    }
-    void GetFishers()
-    {
-        busy = true;
-        header_name = "Bottom Fishers";
-        results = StatsService.GetFishStats();
-        busy = false;
-    }
-    void GetDrawers()
-    {
-        busy = true;
-        header_name = "Top drawers";
-        results = StatsService.GetDrawerStats();
-        busy = false;
-    }
-    void GetChasers()
-    {
-        busy = true;
-        header_name = "Chasers";
-        results = StatsService.GetChaserStats();
-        busy = false;
-    }
-    void GetShimmers()
-    {
-        busy = true;
-        header_name = "Shimmers";
-        results = StatsService.GetShimmerStats();
-        busy = false;
-    }
+            GetPortfolioSize();
+        }
 
-}
+        void GetPortfolioSize()
+        {
+            busy = true;
+            header_name = "Portfolio Size";
+            results = StatsService.GetPortfolioSize(momenta[0]);
+            selected = 0;
+            busy = false;
+        }
+        void GetPortfolioWeight()
+        {
+            busy = true;
+            header_name = "Portfolio Weight";
+            results = StatsService.GetPortfolioWeight(momenta[0]);
+            selected = 1;
+            busy = false;
+        }
+
+        void GetBears()
+        {
+            busy = true;
+            header_name = "Bears";
+            results = StatsService.GetBearStats(momenta[0]);
+            selected = 2;
+            busy = false;
+        }
+        void GetBulls()
+        {
+            busy = true;
+            header_name = "Bulls";
+            results = StatsService.GetBullStats(momenta[0]);
+            selected = 3;
+            busy = false;
+        }
+        void GetSellouts()
+        {
+            busy = true;
+            header_name = "Sellouts";
+            results = StatsService.GetSelloutStats(momenta[0]);
+            foreach (var result in results) result.datavalue = result.datavalue.Substring(1);
+            selected = 4;
+            busy = false;
+        }
+        void GetHodlers()
+        {
+            busy = true;
+            header_name = "Hodlers";
+            results = StatsService.GetHodlerStats(momenta[0]);
+            selected = 5;
+            busy = false;
+        }
+        void GetUnicorns()
+        {
+            busy = true;
+            header_name = "Unicorns";
+            results = StatsService.GetUnicornStats(momenta[0]);
+            selected = 6;
+            busy = false;
+        }
+        void GetFishers()
+        {
+            busy = true;
+            header_name = "Bottom Fishers";
+            results = StatsService.GetFishStats(momenta[0]);
+            selected = 7;
+            busy = false;
+        }
+        void GetDrawers()
+        {
+            busy = true;
+            header_name = "Top drawers";
+            results = StatsService.GetDrawerStats(momenta[0]);
+            selected = 8;
+            busy = false;
+        }
+        void GetChasers()
+        {
+            busy = true;
+            header_name = "Chasers";
+            results = StatsService.GetChaserStats(momenta[0]);
+            selected = 9;
+            busy = false;
+        }
+        void GetShimmers()
+        {
+            busy = true;
+                header_name = "Shimmers";
+            results = StatsService.GetShimmerStats(momenta[0]);
+            selected = 10;
+            busy = false;
+        }
+
+    }

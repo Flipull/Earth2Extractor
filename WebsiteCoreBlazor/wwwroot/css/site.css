@@ -3,7 +3,7 @@
     html, body {
         font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
     }
-
+    
     table, thead, th, tbody, tr, td {
         margin: 0px;
         padding: 0px;
@@ -16,13 +16,16 @@
         color: #fff;
         background-color: #aaa;
         border-color: #48b;
+        margin:2px 2px;
     }
-    .btn-primary:hover {
-        background-color: #bbf;
-    }
-    .btn-primary:focus {
-        background-color: #bbf;
-    }
+        .btn-primary:hover {
+            box-shadow: 0 0 0 3px rgba(146, 199, 255, 1);
+            background-color: #bbf;
+        }
+.selectia {
+    box-shadow: 0 0 0 3px rgba(168, 168, 255, 1);
+    background-color: #bbd;
+}
 
 
     tools {
@@ -45,11 +48,12 @@
 
 
 
-    .corpus {
-        margin: auto;
-        width: 80%;
-        min-width: 650px;
-    }
+.corpus {
+    margin: auto;
+    width: 80%;
+    min-width: 650px;
+    border-bottom: 4px solid #dde;
+}
         .corpus a.title {
             display: block;
             width: calc(100%-20px);
@@ -64,7 +68,7 @@
         .corpus a.title:hover {
             --margin: 0px 0px;
             --padding: 10px 30px;
-            background-color: #679;
+            --background-color: #679;
         }
     .corpus p.descr {
         display: block;
@@ -128,17 +132,22 @@
 
 .corpus .user a.link {
     display: block;
-    padding: 4px 8px;
     min-width: 100%;
 }
-.corpus .user .rank {
-    display:inline-block;
-    text-align: center;
-    font-size: smaller;
-    width: 32px;
-    height: 32px;
-    margin-right: 8px;
-}
+
+        .corpus .user .rank {
+            display: inline-block;
+            width: 32px;
+            height: 32px;
+            text-align: center;
+            font-size: x-small;
+            text-decoration-line:underline;
+        }
+        .corpus .user .toprank {
+            margin-top: -10px;
+            margin-left: -110px;
+            margin-right: 110px;
+        }
 .corpus .user .photo {
     margin: 4px;
     border-radius: 50%;
@@ -159,6 +168,33 @@
     display: inline-block;
     max-width: 15%;
 }
+
+
+
+.ciliary {
+    width: 100%;
+    margin-top: 140px;
+    padding: 4px 60px 10px 60px;
+    background-color: #aaa;
+    font-size: small;
+    border-top: 1px solid #000;
+}
+.ciliary > .header {
+    font-size: large;
+    padding-bottom: 20px;
+    text-decoration-line:underline;
+    text-decoration-style:wavy;
+}
+    .ciliary > memo {
+        padding-left: 40px;
+    }
+
+    .ciliary > memo > io {
+        padding-left: 10px;
+        font-size: initial;
+        font-weight: bold;
+    }
+
 
 
 
