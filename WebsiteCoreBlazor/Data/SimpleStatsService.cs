@@ -7,7 +7,6 @@ namespace WebsiteCoreBlazor.Data
 {
     public class SimpleStatsService
     {
-        private E2DB db = new E2DB();
         private static char[] exponentsbig = new char[] { ' ', 'K', 'M', 'B', 'T', '?', '?', '?' };
         private static string formatBigNumbers(Decimal n)
         {
@@ -55,143 +54,14 @@ namespace WebsiteCoreBlazor.Data
             return n.ToString("N2");
         }
 
-        public List<SimpleStatsViewModel> GetBearStats()
+
+        private List<SimpleStatsViewModel> GetTop100(IQueryable<SimpleStatsViewModel> q)
         {
-            var q =
-                from data in db.Simpletons
-                join user in db.Users
-                on data.userid equals user.Id
-                let bear_bull = data.tilesSoldAmount / (float)data.tilesBoughtAmount
-                where data.totalPropertiesOwned >= 50
-                orderby bear_bull descending
-                select new SimpleStatsViewModel
-                {
-                    user = user,
-                    datavalue = (bear_bull * 100).ToString("N1") + "%"
-                };
             return q.Take(100).ToList();
         }
-
-        public List<SimpleStatsViewModel> GetBullStats()
-        {
-            var q =
-                from data in db.Simpletons
-                join user in db.Users
-                on data.userid equals user.Id
-                let bear_bull = data.tilesSoldAmount / (float)data.tilesBoughtAmount
-                where data.totalPropertiesOwned >= 50
-                orderby bear_bull ascending
-                select new SimpleStatsViewModel
-                {
-                    user = user,
-                    datavalue = ((1-bear_bull) * 100).ToString("N1") + "%"
-                };
-            return q.Take(100).ToList();
-        }
-        
-        public List<SimpleStatsViewModel> GetSelloutStats()
-        {
-            var q =
-                from data in db.Simpletons
-                join user in db.Users
-                on data.userid equals user.Id
-                let sellout_hodler = data.tilesCurrentlyOwned - data.tilesSoldAmount
-                orderby sellout_hodler ascending
-                select new SimpleStatsViewModel
-                {
-                    user = user,
-                    datavalue = sellout_hodler.ToString()
-                };
-            return q.Take(100).ToList();
-        }
-
-        public List<SimpleStatsViewModel> GetHodlerStats()
-        {
-            var q =
-                from data in db.Simpletons
-                join user in db.Users
-                on data.userid equals user.Id
-                let sellout_hodler = data.tilesCurrentlyOwned - data.tilesSoldAmount
-                orderby sellout_hodler descending
-                select new SimpleStatsViewModel
-                {
-                    user = user,
-                    datavalue = sellout_hodler.ToString()
-                };
-            return q.Take(100).ToList();
-        }
-
-
-        public List<SimpleStatsViewModel> GetFishStats()
-        {
-            var q =
-                from data in db.Simpletons
-                join user in db.Users
-                on data.userid equals user.Id
-                let fish_drawer = data.profitsOnSell
-                orderby fish_drawer descending
-                select new SimpleStatsViewModel
-                {
-                    user = user,
-                    datavalue = formatBigNumbers(fish_drawer)
-                };
-            return q.Take(100).ToList();
-        }
-
-        public List<SimpleStatsViewModel> GetDrawerStats()
-        {
-            var q =
-                from data in db.Simpletons
-                join user in db.Users
-                on data.userid equals user.Id
-                let fish_drawer = data.profitsOnSell
-                orderby fish_drawer ascending
-                select new SimpleStatsViewModel
-                {
-                    user = user,
-                    datavalue = formatBigNumbers(fish_drawer)
-                };
-            return q.Take(100).ToList();
-        }
-
-        public List<SimpleStatsViewModel> GetChaserStats()
-        {
-            var q =
-                from data in db.Simpletons
-                join user in db.Users
-                on data.userid equals user.Id
-                let ret_ret = data.returnsOnSell / data.totalPropertiesResold
-                let resoldratio = data.totalPropertiesResold / (float)data.totalPropertiesOwned
-                where data.totalPropertiesResold >= 25
-                orderby ret_ret descending
-                select new SimpleStatsViewModel
-                {
-                    user = user,
-                    datavalue = (ret_ret * 100).ToString("N1") + "%"
-                };
-            return q.Take(100).ToList();
-        }
-
-        public List<SimpleStatsViewModel> GetShimmerStats()
-        {
-            var q =
-                from data in db.Simpletons
-                join user in db.Users
-                on data.userid equals user.Id
-                let ret_ret = data.returnsOnSell / data.totalPropertiesResold
-                let resoldratio = data.totalPropertiesResold / (float)data.totalPropertiesOwned
-                where data.totalPropertiesResold >= 25
-                orderby ret_ret ascending
-                select new SimpleStatsViewModel
-                {
-                    user = user,
-                    datavalue = (ret_ret * 100).ToString("N1") + "%"
-                };
-            return q.Take(100).ToList();
-        }
-
         public List<SimpleStatsViewModel> GetPortfolioSize()
         {
+            E2DB db = new E2DB();
             var q =
                 from data in db.Simpletons
                 join user in db.Users
@@ -203,11 +73,12 @@ namespace WebsiteCoreBlazor.Data
                     user = user,
                     datavalue = formatBigNumbers(data.currentPropertiesOwned)
                 };
-            return q.Take(100).ToList();
+            return GetTop100(q);
         }
-        
+
         public List<SimpleStatsViewModel> GetPortfolioWeight()
         {
+            E2DB db = new E2DB();
             var q =
                 from data in db.Simpletons
                 join user in db.Users
@@ -220,11 +91,183 @@ namespace WebsiteCoreBlazor.Data
                     user = user,
                     datavalue = port_weight.ToString("N1")
                 };
-            return q.Take(100).ToList();
+            return GetTop100(q);
         }
+
+        public List<SimpleStatsViewModel> GetBearStats()
+        {
+            E2DB db = new E2DB();
+            var q =
+                from data in db.Simpletons
+                join user in db.Users
+                on data.userid equals user.Id
+                let bear_bull = (float)data.tilesSoldAmount / data.tilesBoughtAmount
+                where data.tilesBoughtAmount > 25000 || data.totalPropertiesOwned > 400
+                orderby bear_bull descending, data.tilesBoughtAmount descending
+                select new SimpleStatsViewModel
+                {
+                    user = user,
+                    //datavalue = bear_bull.ToString("N5")
+                    datavalue = (bear_bull * 100).ToString("N1") + "%"
+                };
+            return GetTop100(q);
+        }
+
+        public List<SimpleStatsViewModel> GetBullStats()
+        {
+            E2DB db = new E2DB();
+            var top =
+            (from data in db.Simpletons
+             where data.totalPropertiesOwned >= 50
+             orderby data.tilesBoughtAmount descending
+             select data.tilesBoughtAmount).Take(1).ToList()[0];
+
+            var q =
+                from data in db.Simpletons
+                join user in db.Users
+                on data.userid equals user.Id
+                let bear_bull = (float)data.tilesSoldAmount / data.tilesBoughtAmount
+                where data.tilesBoughtAmount > 25000 || data.totalPropertiesOwned > 400
+                orderby bear_bull ascending, data.tilesBoughtAmount descending
+                select new SimpleStatsViewModel
+                {
+                    user = user,
+                    //datavalue = bear_bull.ToString("N5")
+                    datavalue = ((1-bear_bull) * 100).ToString("N1") + "%"
+                };
+            return GetTop100(q);
+        }
+
+        public List<SimpleStatsViewModel> GetSelloutStats()
+        {
+            E2DB db = new E2DB();
+            var q =
+                from data in db.Simpletons
+                join user in db.Users
+                on data.userid equals user.Id
+                let sellout_hodler = data.tilesCurrentlyOwned - data.tilesSoldAmount
+                orderby sellout_hodler ascending
+                select new SimpleStatsViewModel
+                {
+                    user = user,
+                    datavalue = sellout_hodler.ToString()
+                };
+            return GetTop100(q);
+        }
+
+        public List<SimpleStatsViewModel> GetHodlerStats()
+        {
+            E2DB db = new E2DB();
+            var q =
+                from data in db.Simpletons
+                join user in db.Users
+                on data.userid equals user.Id
+                let sellout_hodler = data.tilesCurrentlyOwned - data.tilesSoldAmount
+                orderby sellout_hodler descending
+                select new SimpleStatsViewModel
+                {
+                    user = user,
+                    datavalue = sellout_hodler.ToString()
+                };
+            return GetTop100(q);
+        }
+
+
+        public List<SimpleStatsViewModel> GetUnicornStats()
+        {
+            E2DB db = new E2DB();
+            var q =
+                from data in db.Simpletons
+                join user in db.Users
+                on data.userid equals user.Id
+                let unicorn = data.profitsOnSell
+                orderby unicorn descending
+                select new SimpleStatsViewModel
+                {
+                    user = user,
+                    datavalue = formatBigNumbers(unicorn)
+                };
+            return GetTop100(q);
+        }
+
+        public List<SimpleStatsViewModel> GetFishStats()
+        {
+            E2DB db = new E2DB();
+            var q =
+                from data in db.Simpletons
+                join user in db.Users
+                on data.userid equals user.Id
+                let fish_drawer = (float) data.profitsOnSell / (float)data.totalPropertiesResold
+                where data.totalPropertiesResold > 200
+                orderby fish_drawer descending
+                select new SimpleStatsViewModel
+                {
+                    user = user,
+                    datavalue = formatBigNumbers(fish_drawer)
+                };
+            return GetTop100(q);
+        }
+
+        public List<SimpleStatsViewModel> GetDrawerStats()
+        {
+            E2DB db = new E2DB();
+            var q =
+                from data in db.Simpletons
+                join user in db.Users
+                on data.userid equals user.Id
+                let fish_drawer = (float)data.profitsOnSell / (float)data.totalPropertiesResold
+                where data.totalPropertiesResold > 200
+                orderby fish_drawer ascending
+                select new SimpleStatsViewModel
+                {
+                    user = user,
+                    datavalue = formatBigNumbers(fish_drawer)
+                };
+            return GetTop100(q);
+        }
+
+        public List<SimpleStatsViewModel> GetChaserStats()
+        {
+            E2DB db = new E2DB();
+            var q =
+                from data in db.Simpletons
+                join user in db.Users
+                on data.userid equals user.Id
+                let ret_ret = data.returnsOnSell / data.totalPropertiesResold
+                let resoldratio = data.totalPropertiesResold / (float)data.totalPropertiesOwned
+                where data.totalUniquePropertiesOwned >= 150 && data.totalPropertiesResold >= 50
+                orderby ret_ret descending
+                select new SimpleStatsViewModel
+                {
+                    user = user,
+                    datavalue = (ret_ret * 100).ToString("N1") + "%"
+                };
+            return GetTop100(q);
+        }
+
+        public List<SimpleStatsViewModel> GetShimmerStats()
+        {
+            E2DB db = new E2DB();
+            var q =
+                from data in db.Simpletons
+                join user in db.Users
+                on data.userid equals user.Id
+                let ret_ret = data.returnsOnSell / data.totalPropertiesResold
+                let resoldratio = data.totalPropertiesResold / (float)data.totalPropertiesOwned
+                where data.totalUniquePropertiesOwned >= 150 && data.totalPropertiesResold >= 50
+                orderby ret_ret ascending
+                select new SimpleStatsViewModel
+                {
+                    user = user,
+                    datavalue = (ret_ret * 100).ToString("N1") + "%"
+                };
+            return GetTop100(q);
+        }
+
 
         public List<SimpleStatsViewModel> COMPLETETESTGETMETHOD()
         {
+            E2DB db = new E2DB();
             var q =
                 from data in db.Simpletons
                 join user in db.Users
@@ -243,7 +286,7 @@ namespace WebsiteCoreBlazor.Data
                     user = user,
                     datavalue = bear_bull.ToString()
                 };
-            return q.Take(100).ToList();
+            return GetTop100(q);
         }
     }
 }

@@ -2,70 +2,83 @@
 @using WebsiteCoreBlazor.Data
 @inject SimpleStatsService StatsService
 
-
-<button class="btn btn-primary" @onclick="GetPortfolioSize"></button>
-<button class="btn btn-primary" @onclick="GetPortfolioWeight"></button>
-
-<button class="btn btn-primary" @onclick="GetBears"></button>
-<button class="btn btn-primary" @onclick="GetBulls"></button>
-
-<button class="btn btn-primary" @onclick="GetSellouts"></button>
-<button class="btn btn-primary" @onclick="GetHodlers"></button>
-
-
-<button class="btn btn-primary" @onclick="GetUnicorns"></button>
-
-
-<button class="btn btn-primary" @onclick="GetFishers"></button>
-<button class="btn btn-primary" @onclick="GetDrawers"></button>
-
-<button class="btn btn-primary" @onclick="GetChasers"></button>
-<button class="btn btn-primary" @onclick="GetShimmers"></button>
-
+    <tools>
+        <button class="btn btn-primary" @onclick="GetPortfolioSize"></button>
+        <button class="btn btn-primary" @onclick="GetPortfolioWeight"></button>
+        <spacer />
+        <button class="btn btn-primary" @onclick="GetBears"></button>
+        <button class="btn btn-primary" @onclick="GetBulls"></button>
+        <spacer />
+        <button class="btn btn-primary" @onclick="GetSellouts"></button>
+        <button class="btn btn-primary" @onclick="GetHodlers"></button>
+        <spacer />
+        <button class="btn btn-primary" @onclick="GetUnicorns"></button>
+        <spacer />
+        <button class="btn btn-primary" @onclick="GetFishers"></button>
+        <button class="btn btn-primary" @onclick="GetDrawers"></button>
+        <spacer />
+        <button class="btn btn-primary" @onclick="GetChasers"></button>
+        <button class="btn btn-primary" @onclick="GetShimmers"></button>
+    </tools>
 
 
-<table class="table">
+<table class="corpus">
     <thead>
         <tr>
-            <th>User</th>
             @if (busy)
             {
-                <th>unknown</th>
+            <th>unknown</th>
             }
             else
             {
-                <th>@header_name</th>
+        <th>
+            <a class="title" href="">@header_name</a>
+            <!--<p class="descr">@header_descr</p>-->
+        </th>
             }
         </tr>
     </thead>
     <tbody>
         @if (busy)
         {
-            <tr><td><em>Loading...</em></td></tr>
+        <tr><td><em><span class="spinner spinner-border"></span> Loading</em></td></tr>
         }
         else
         {
-            @foreach (var data in results)
-            {
-                <tr>
-                    <td>@data.user.Id</td>
-                    <td>@data.datavalue</td>
-                </tr>
+            @for(int i=0;i<results.Count;i++){
+        <tr>
+            <td class="user">
+                <a class="link" href="https://app.earth2.io/#profile/@results[i].user.Id">
+
+                    <div class="rank">@if( (i+1)%10==0 || (i+1)<=3 ){ @(i+1); }</div>
+                    <img class="photo" src="@results[i].user.customPhoto" width="48" height="48" />
+                    <div class="name">@results[i].user.name</div>
+                    <div class="data">@results[i].datavalue</div>
+                </a>
+            </td>
+        </tr>
             }
         }
     </tbody>
 </table>
-
+<br />
 
 
 @code {
     bool busy = true;
 
     string header_name = "unknown";
+    string header_descr = @"Some description, this is for a test.
+                            Test test test<h1>test</h1>";
     List<SimpleStatsViewModel> results = null;
 
-
-
+    protected override async Task OnInitializedAsync()
+    {
+        busy = true;
+        header_name = "Portfolio Size";
+        results = StatsService.GetPortfolioSize();
+        busy = false;
+    }
     void GetPortfolioSize()
     {
         busy = true;
@@ -100,6 +113,7 @@
         busy = true;
         header_name = "Sellouts";
         results = StatsService.GetSelloutStats();
+        foreach(var result in results) result.datavalue = result.datavalue.Substring(1); 
         busy = false;
     }
     void GetHodlers()
@@ -113,7 +127,7 @@
     {
         busy = true;
         header_name = "Unicorns";
-
+        results = StatsService.GetUnicornStats();
         busy = false;
     }
     void GetFishers()
