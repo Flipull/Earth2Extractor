@@ -46,10 +46,12 @@ namespace Earth2ExtractorCore.Migrations
                         .HasColumnType("nvarchar(36)");
 
                     b.Property<string>("ownerId")
-                        .HasColumnType("nvarchar(450)");
+                        .HasMaxLength(36)
+                        .HasColumnType("nvarchar(36)");
 
                     b.Property<string>("previousOwnerId")
-                        .HasColumnType("nvarchar(450)");
+                        .HasMaxLength(36)
+                        .HasColumnType("nvarchar(36)");
 
                     b.Property<decimal>("price")
                         .HasColumnType("decimal(18,2)");
@@ -61,10 +63,6 @@ namespace Earth2ExtractorCore.Migrations
                     b.HasKey("id");
 
                     b.HasIndex("landFieldid");
-
-                    b.HasIndex("ownerId");
-
-                    b.HasIndex("previousOwnerId");
 
                     b.ToTable("Transactions");
                 });
@@ -102,6 +100,9 @@ namespace Earth2ExtractorCore.Migrations
                     b.Property<int>("totalPropertiesResold")
                         .HasColumnType("int");
 
+                    b.Property<int>("totalUniquePropertiesOwned")
+                        .HasColumnType("int");
+
                     b.HasKey("userid", "momenta");
 
                     b.ToTable("Simpletons");
@@ -112,6 +113,13 @@ namespace Earth2ExtractorCore.Migrations
                     b.Property<string>("Id")
                         .HasMaxLength(36)
                         .HasColumnType("nvarchar(36)");
+
+                    b.Property<string>("countryCode")
+                        .HasMaxLength(8)
+                        .HasColumnType("nvarchar(8)");
+
+                    b.Property<string>("customPhoto")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("locked")
                         .HasColumnType("bit");
