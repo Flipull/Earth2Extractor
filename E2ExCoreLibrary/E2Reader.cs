@@ -35,12 +35,13 @@ namespace E2ExCoreLibrary
                     using (Stream stream = response.GetResponseStream())
                     using (StreamReader reader = new StreamReader(stream))
                         json = reader.ReadToEnd();
+                    success = true;
                 }
-                catch (System.Net.WebException e)
+                catch (Exception e)
                 {
-                    System.Threading.Thread.Sleep(5000);
+                    Console.WriteLine(e.ToString());
+                    System.Threading.Thread.Sleep(30000);
                 }
-                finally { success = true; }
             }
 
             return JsonConvert.DeserializeObject<User>(json);
@@ -67,12 +68,13 @@ namespace E2ExCoreLibrary
                     using (Stream stream = response.GetResponseStream())
                     using (StreamReader reader = new StreamReader(stream))
                         json = reader.ReadToEnd();
+                    success = true;
                 }
-                catch (System.Net.WebException e)
+                catch (Exception e)
                 {
-                    System.Threading.Thread.Sleep(5000);
+                    Console.WriteLine(e.ToString());
+                    System.Threading.Thread.Sleep(30000);
                 }
-                finally { success = true; }
             }
 
             JObject job = (JObject)JsonConvert.DeserializeObject(json);
@@ -118,18 +120,13 @@ namespace E2ExCoreLibrary
                     using (Stream stream = response.GetResponseStream())
                     using (StreamReader reader = new StreamReader(stream))
                         json = reader.ReadToEnd();
-                }
-                catch (System.Net.WebException e)
-                {
-                    Console.WriteLine(e.ToString());
-                    System.Threading.Thread.Sleep(5000);
+                    success = true;
                 }
                 catch (Exception e)
                 {
                     Console.WriteLine(e.ToString());
                     System.Threading.Thread.Sleep(30000);
                 }
-                finally { success = true; }
             }
 
             var job = (JObject)JsonConvert.DeserializeObject(json);
@@ -161,18 +158,13 @@ namespace E2ExCoreLibrary
                     using (Stream stream = response.GetResponseStream())
                     using (StreamReader reader = new StreamReader(stream))
                         json = reader.ReadToEnd();
-                }
-                catch (System.Net.WebException e)
-                {
-                    Console.WriteLine(e.ToString());
-                    System.Threading.Thread.Sleep(10000);
+                    success = true;
                 }
                 catch (Exception e)
                 {
                     Console.WriteLine(e.ToString());
                     System.Threading.Thread.Sleep(30000);
                 }
-                finally { success = true; }
             }
 
             JObject job = (JObject)JsonConvert.DeserializeObject(json);
@@ -205,18 +197,13 @@ namespace E2ExCoreLibrary
                     using (Stream stream = response.GetResponseStream())
                     using (StreamReader reader = new StreamReader(stream))
                         json = reader.ReadToEnd();
-                }
-                catch (System.Net.WebException e)
-                {
-                    Console.WriteLine(e.ToString());
-                    System.Threading.Thread.Sleep(10000);
+                    success = true;
                 }
                 catch (Exception e)
                 {
                     Console.WriteLine(e.ToString());
                     System.Threading.Thread.Sleep(30000);
                 }
-                finally { success = true; }
             }
 
             JObject job = (JObject)JsonConvert.DeserializeObject(json);
@@ -245,18 +232,13 @@ namespace E2ExCoreLibrary
                     using (Stream stream = response.GetResponseStream())
                     using (StreamReader reader = new StreamReader(stream))
                         json = reader.ReadToEnd();
-                }
-                catch (System.Net.WebException e)
-                {
-                    Console.WriteLine(e.ToString());
-                    System.Threading.Thread.Sleep(10000);
+                    success = true;
                 }
                 catch(Exception e)
                 {
                     Console.WriteLine(e.ToString());
                     System.Threading.Thread.Sleep(30000);
                 }
-                finally { success = true; }
             }
 
             JObject job = (JObject)JsonConvert.DeserializeObject(json);

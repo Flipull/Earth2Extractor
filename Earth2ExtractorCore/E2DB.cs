@@ -27,10 +27,8 @@ namespace Earth2ExtractorCore
         }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<LandFieldTransactions>()
-                .HasIndex("ownerId");
-            modelBuilder.Entity<LandFieldTransactions>()
-                .HasIndex("previousOwnerId");
+            //modelBuilder.Entity<LandFieldTransactions>().HasIndex("ownerId");
+            //modelBuilder.Entity<LandFieldTransactions>().HasIndex("previousOwnerId");
             modelBuilder.Entity<SimpleData>()
                 .HasKey(p => new { p.userid, p.momenta });
             base.OnModelCreating(modelBuilder);

@@ -17,6 +17,9 @@ namespace E2ExCoreLibrary.Model
         [StringLength(8)]
         public string countryCode { get; set; }
         public string customPhoto { get; set; }
+        [NotMapped]
+        public string picture { get; set; }
+
         public string name { get; set; }
         [NotMapped]
         public string username { get; set; }
