@@ -12,7 +12,6 @@ namespace WebsiteCoreBlazor
         public virtual DbSet<User> Users { get; set; }
         public virtual DbSet<LandField> LandFields { get; set; }
         public virtual DbSet<LandFieldTransactions> Transactions { get; set; }
-
         public virtual DbSet<SimpleData> Simpletons { get; set; }
         
 
@@ -27,10 +26,10 @@ namespace WebsiteCoreBlazor
         }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<LandFieldTransactions>()
-                .HasIndex("ownerId");
-            modelBuilder.Entity<LandFieldTransactions>()
-                .HasIndex("previousOwnerId");
+            //modelBuilder.Entity<LandFieldTransactions>()
+            //    .HasIndex("ownerId");
+            //modelBuilder.Entity<LandFieldTransactions>()
+            //    .HasIndex("previousOwnerId");
             modelBuilder.Entity<SimpleData>()
                 .HasKey(p => new { p.userid, p.momenta });
             base.OnModelCreating(modelBuilder);

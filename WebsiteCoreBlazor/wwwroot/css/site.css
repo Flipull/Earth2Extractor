@@ -1,5 +1,4 @@
 @import url('open-iconic/font/css/open-iconic-bootstrap.min.css');
-
     html, body {
         font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
     }
@@ -12,6 +11,19 @@
         color: #000;
         text-decoration: none;
     }
+
+
+
+
+
+
+
+
+
+
+
+
+
     .btn-primary {
         color: #fff;
         background-color: #aaa;
@@ -28,21 +40,31 @@
 }
 
 
-    tools {
-        margin: auto;
-        text-align: center;
-        display: block;
-        min-width: 650px;
-        margin-bottom: 8px;
-    }
+bar {
+    display: block;
+    height: 68px;
+    background-color: #aaa;
+    background-image: url("/logo.png");
+    background-repeat: no-repeat;
+    background-position: 50% 0px;
+    border-bottom: 1px solid #000;
+    margin-bottom: 8px;
+}
+tools {
+    margin: auto;
+    text-align: center;
+    display: block;
+    min-width: 650px;
+    padding-bottom: 16px;
+    margin-bottom: 8px;
+}
 
     tools > .btn {
         padding: 16px;
-
     }
     tools > spacer {
         display: inline-block;
-        margin: 0px 8px;
+        margin: 0px 6px;
     }
 
 
@@ -52,19 +74,26 @@
     margin: auto;
     width: 80%;
     min-width: 650px;
+    min-height: 650px;
     border-bottom: 4px solid #dde;
 }
-        .corpus a.title {
-            display: block;
-            width: calc(100%-20px);
-            background-color: #aaa;
-            font-size: large;
-            text-align: center;
-            --margin: 10px 30px;
-            --padding: 0px 0px;
-            margin-top:10px;
-            padding: 10px 0px;
-        }
+    .corpus .header {
+        background-color: #aaa;
+        margin-top: 10px;
+    }
+    .corpus .momenta {
+        padding: 4px;
+        margin-left: 8px;
+        margin-right: 0px;
+    }
+    .corpus .title {
+        display: inline-block;
+        padding: 10px 0px;
+        margin-left: -20px;
+        width: 70%;
+        font-size: large;
+        text-align: center;
+    }
         .corpus a.title:hover {
             --margin: 0px 0px;
             --padding: 10px 30px;
@@ -123,57 +152,64 @@
     .corpus > tbody > tr:nth-child(3):hover {
         background-color: #fda;
     }
-    .corpus .user .data {
-        font-weight: bold;
-    }
 
     .corpus .user {
     }
 
-.corpus .user a.link {
-    display: block;
-    min-width: 100%;
-}
+        .corpus .user a.link {
+            border-left: 1px solid #aaa;
+            border-right: 1px solid #aaa;
+            display: block;
+            min-width: 100%;
+        }
 
         .corpus .user .rank {
             display: inline-block;
-            width: 32px;
-            height: 32px;
+            width: 24px;
+            height: 24px;
             text-align: center;
             font-size: x-small;
-            text-decoration-line:underline;
+            text-decoration-line: underline;
         }
+            .corpus .user .rank span {
+                --margin-top: -10px;
+                margin-left: -30px;
+                padding-right: 30px;
+            }
         .corpus .user .toprank {
             margin-top: -10px;
-            margin-left: -110px;
-            margin-right: 110px;
+            margin-left: -100px;
+            margin-right: 100px;
         }
 .corpus .user .photo {
-    margin: 4px;
+    margin: 1px;
     border-radius: 50%;
+    background-color: #fff;
 }
 .corpus .user .name {
     display: inline-block;
     vertical-align: middle;
     
-    width: 60%;
-    max-width: 60%;
+    width: 50%;
+    max-width: 650px;
     padding-left: 10px;
 
     overflow: hidden;
     text-overflow: ellipsis;
 }
-.corpus .user .data {
-    margin-left: 10%;
-    display: inline-block;
-    max-width: 15%;
-}
+        .corpus .user .data {
+            margin-left: 20%;
+            display: inline-block;
+            max-width: 25%;
+            font-weight: bold;
+        }
 
 
 
 .ciliary {
     width: 100%;
-    margin-top: 140px;
+    min-width: 650px;
+    margin-top: 80px;
     padding: 4px 60px 10px 60px;
     background-color: #aaa;
     font-size: small;
@@ -186,6 +222,7 @@
     text-decoration-style:wavy;
 }
     .ciliary > memo {
+        display: inline-block;
         padding-left: 40px;
     }
 
@@ -211,7 +248,6 @@ app {
 }
 
 .content {
-    padding-top: 1.1rem;
 }
 
 .valid.modified:not([type=checkbox]) {
@@ -224,11 +260,4 @@ app {
 
 .validation-message {
     color: red;
-}
-
-@media (min-width: 768px) {
-    app {
-        flex-direction: row;
-    }
-
 }

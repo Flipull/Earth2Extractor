@@ -60,7 +60,7 @@ namespace WebsiteCoreBlazor.Data
             return db.Simpletons.Select(d => d.momenta)
                                 .Distinct()
                                 .AsEnumerable()
-                                .OrderBy(d=>d.Ticks)
+                                .OrderByDescending(d=>d.Ticks)
                                 .ToList();
         }
 
@@ -68,7 +68,7 @@ namespace WebsiteCoreBlazor.Data
 
         private List<SimpleStatsViewModel> GetTop100(IQueryable<SimpleStatsViewModel> q)
         {
-            return q.Take(100).ToList();
+            return q.Take(50).ToList();
         }
         public List<SimpleStatsViewModel> GetPortfolioSize(DateTime moment)
         {
@@ -109,13 +109,15 @@ namespace WebsiteCoreBlazor.Data
 
         public List<SimpleStatsViewModel> GetBearStats(DateTime moment)
         {
+            if (moment < new DateTime(2021, 1, 1))
+                return new List<SimpleStatsViewModel>();
             E2DB db = new E2DB();
             var q =
                 from data in db.Simpletons
                 join user in db.Users
                 on data.userid equals user.Id
                 let bear_bull = (float)data.tilesSoldAmount / data.tilesBoughtAmount
-                where data.tilesBoughtAmount > 25000 || data.totalPropertiesOwned > 400
+                where (data.tilesBoughtAmount + data.tilesSoldAmount >= 9000)
                     && data.momenta == moment
                 orderby bear_bull descending, data.tilesBoughtAmount descending
                 select new SimpleStatsViewModel
@@ -129,6 +131,8 @@ namespace WebsiteCoreBlazor.Data
 
         public List<SimpleStatsViewModel> GetBullStats(DateTime moment)
         {
+            if (moment < new DateTime(2021, 1, 1))
+                return new List<SimpleStatsViewModel>();
             E2DB db = new E2DB();
             var top =
             (from data in db.Simpletons
@@ -141,7 +145,7 @@ namespace WebsiteCoreBlazor.Data
                 join user in db.Users
                 on data.userid equals user.Id
                 let bear_bull = (float)data.tilesSoldAmount / data.tilesBoughtAmount
-                where data.tilesBoughtAmount > 25000 || data.totalPropertiesOwned > 400
+                where (data.tilesBoughtAmount + data.tilesSoldAmount >= 9000)
                     && data.momenta == moment
                 orderby bear_bull ascending, data.tilesBoughtAmount descending
                 select new SimpleStatsViewModel
@@ -219,7 +223,7 @@ namespace WebsiteCoreBlazor.Data
                 join user in db.Users
                 on data.userid equals user.Id
                 let fish_drawer = (float) data.profitsOnSell / (float)data.totalPropertiesResold
-                where data.totalPropertiesResold > 200
+                where data.totalPropertiesResold >= 100
                     && data.momenta == moment
                 orderby fish_drawer descending
                 select new SimpleStatsViewModel
@@ -238,7 +242,7 @@ namespace WebsiteCoreBlazor.Data
                 join user in db.Users
                 on data.userid equals user.Id
                 let fish_drawer = (float)data.profitsOnSell / (float)data.totalPropertiesResold
-                where data.totalPropertiesResold > 200
+                where data.totalPropertiesResold >= 100
                     && data.momenta == moment
                 orderby fish_drawer ascending
                 select new SimpleStatsViewModel
@@ -258,7 +262,7 @@ namespace WebsiteCoreBlazor.Data
                 on data.userid equals user.Id
                 let ret_ret = data.returnsOnSell / data.totalPropertiesResold
                 let resoldratio = data.totalPropertiesResold / (float)data.totalPropertiesOwned
-                where data.totalUniquePropertiesOwned >= 150 && data.totalPropertiesResold >= 50
+                where data.totalUniquePropertiesOwned >= 60 && data.totalPropertiesResold >= 60
                     && data.momenta == moment
                 orderby ret_ret descending
                 select new SimpleStatsViewModel
@@ -278,7 +282,7 @@ namespace WebsiteCoreBlazor.Data
                 on data.userid equals user.Id
                 let ret_ret = data.returnsOnSell / data.totalPropertiesResold
                 let resoldratio = data.totalPropertiesResold / (float)data.totalPropertiesOwned
-                where data.totalUniquePropertiesOwned >= 150 && data.totalPropertiesResold >= 50
+                where data.totalUniquePropertiesOwned >= 60 && data.totalPropertiesResold >= 60
                     && data.momenta == moment
                 orderby ret_ret ascending
                 select new SimpleStatsViewModel

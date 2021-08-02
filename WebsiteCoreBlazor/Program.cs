@@ -18,34 +18,36 @@ namespace WebsiteCoreBlazor
         {
             var uids = new HashSet<string>();
             /* EXTRACT IMPORTANT USER IDS FOR DETAILS CODE
-            */
+            **
             var db = new E2DB();
             var ss = new SimpleStatsService();
             var mm = ss.GetMomenta();
-            var date = mm[mm.Count - 1];
+            //var date = mm[mm.Count - 1];
+            foreach (var date in mm) {
+                foreach (var s in ss.GetPortfolioSize(date))
+                    uids.Add(s.user.Id);
+                foreach (var s in ss.GetPortfolioWeight(date))
+                    uids.Add(s.user.Id);
+                foreach (var s in ss.GetBearStats(date))
+                    uids.Add(s.user.Id);
+                foreach (var s in ss.GetBullStats(date))
+                    uids.Add(s.user.Id);
+                foreach (var s in ss.GetChaserStats(date))
+                    uids.Add(s.user.Id);
+                foreach (var s in ss.GetDrawerStats(date))
+                    uids.Add(s.user.Id);
+                foreach (var s in ss.GetFishStats(date))
+                    uids.Add(s.user.Id);
+                foreach (var s in ss.GetHodlerStats(date))
+                    uids.Add(s.user.Id);
+                foreach (var s in ss.GetSelloutStats(date))
+                    uids.Add(s.user.Id);
+                foreach (var s in ss.GetShimmerStats(date))
+                    uids.Add(s.user.Id);
+                foreach (var s in ss.GetUnicornStats(date))
+                    uids.Add(s.user.Id);
+            }
 
-            foreach (var s in ss.GetPortfolioSize(date))
-                uids.Add(s.user.Id);
-            foreach (var s in ss.GetPortfolioWeight(date))
-                uids.Add(s.user.Id);
-            foreach (var s in ss.GetBearStats(date))
-                uids.Add(s.user.Id);
-            foreach (var s in ss.GetBullStats(date))
-                uids.Add(s.user.Id);
-            foreach (var s in ss.GetChaserStats(date))
-                uids.Add(s.user.Id);
-            foreach (var s in ss.GetDrawerStats(date))
-                uids.Add(s.user.Id);
-            foreach (var s in ss.GetFishStats(date))
-                uids.Add(s.user.Id);
-            foreach (var s in ss.GetHodlerStats(date))
-                uids.Add(s.user.Id);
-            foreach (var s in ss.GetSelloutStats(date))
-                uids.Add(s.user.Id);
-            foreach (var s in ss.GetShimmerStats(date))
-                uids.Add(s.user.Id);
-            foreach (var s in ss.GetUnicornStats(date))
-                uids.Add(s.user.Id);
             var r = "{";
             foreach(var id in uids)
             {
@@ -55,7 +57,7 @@ namespace WebsiteCoreBlazor
             r = r + "}";
 
             return;
-
+            */
             CreateHostBuilder(args).Build().Run();
         }
 

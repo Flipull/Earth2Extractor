@@ -3,6 +3,7 @@
 @inject SimpleStatsService StatsService
 
 <tools>
+    <bar></bar>
     <button class="btn btn-primary@( (selected == 0) ? " selectia":"")"
             
             @onclick="GetPortfolioSize"></button>
@@ -47,25 +48,19 @@
 <table class="corpus">
     <thead>
         <tr>
-            @if (busy)
-            {
-            <th>unknown</th>
-            }
-            else
-            {
-        <th>
-            <a class="title" href="">@header_name</a>
-            <!--<p class="descr">@header_descr</p>-->
-        </th>
-            }
+            <th class="header">
+                <select class="momenta" @onchange="DoNothing">
+                    @foreach(var moment in momenta ) {
+                    <option value="@moment.ToString()">@moment.ToString("d MMMM yyyy")</option>
+                }
+                </select>
+                <span class="title" href="">@(!busy?header_name:"")</span>
+                 <!--<p class="descr">@header_descr</p>-->
+            </th>
         </tr>
     </thead>
     <tbody>
-        @if (busy)
-        {
-        <tr><td><em><span class="spinner spinner-border"></span> Loading</em></td></tr>
-        }
-        else
+        @if (!busy)
         {
             @for(int i=0;i<results.Count;i++){
         <tr>
@@ -110,7 +105,7 @@
     <memo>
         Last updated:
         <io>
-            @momenta[0].ToString("dd MMMM yyyy")
+            @selected_moment.ToString("dd MMMM yyyy")
         </io>
     </memo>
     <memo>
@@ -124,6 +119,7 @@
     @code {
         bool busy = true;
         int selected = 0;
+        DateTime selected_moment;
 
         List<DateTime> momenta = null;
         string header_name = "unknown";
@@ -131,10 +127,26 @@
                             Test test test<h1>test</h1> ;//TODO test js/css/html-manip-funcs";
         List<SimpleStatsViewModel> results = null;
 
+        void DoNothing(ChangeEventArgs e) {
+            selected_moment = DateTime.Parse((string)e.Value);
+            if (selected==0) GetPortfolioSize();
+            if (selected==1) GetPortfolioWeight();
+            if (selected==2) GetBears();
+            if (selected==3) GetBulls();
+            if (selected==4) GetSellouts();
+            if (selected==5) GetHodlers();
+            if (selected==6) GetUnicorns();
+            if (selected==7) GetFishers();
+            if (selected==8) GetDrawers();
+            if (selected==9) GetChasers();
+            if (selected==10) GetShimmers();
+        }
+
         protected override async Task OnInitializedAsync()
         {
             //get dates
             momenta = StatsService.GetMomenta();
+            selected_moment = momenta[0];
 
             GetPortfolioSize();
         }
@@ -143,7 +155,7 @@
         {
             busy = true;
             header_name = "Portfolio Size";
-            results = StatsService.GetPortfolioSize(momenta[0]);
+            results = StatsService.GetPortfolioSize(selected_moment);
             selected = 0;
             busy = false;
         }
@@ -151,7 +163,7 @@
         {
             busy = true;
             header_name = "Portfolio Weight";
-            results = StatsService.GetPortfolioWeight(momenta[0]);
+            results = StatsService.GetPortfolioWeight(selected_moment);
             selected = 1;
             busy = false;
         }
@@ -160,7 +172,7 @@
         {
             busy = true;
             header_name = "Bears";
-            results = StatsService.GetBearStats(momenta[0]);
+            results = StatsService.GetBearStats(selected_moment);
             selected = 2;
             busy = false;
         }
@@ -168,7 +180,7 @@
         {
             busy = true;
             header_name = "Bulls";
-            results = StatsService.GetBullStats(momenta[0]);
+            results = StatsService.GetBullStats(selected_moment);
             selected = 3;
             busy = false;
         }
@@ -176,7 +188,7 @@
         {
             busy = true;
             header_name = "Sellouts";
-            results = StatsService.GetSelloutStats(momenta[0]);
+            results = StatsService.GetSelloutStats(selected_moment);
             foreach (var result in results) result.datavalue = result.datavalue.Substring(1);
             selected = 4;
             busy = false;
@@ -185,7 +197,7 @@
         {
             busy = true;
             header_name = "Hodlers";
-            results = StatsService.GetHodlerStats(momenta[0]);
+            results = StatsService.GetHodlerStats(selected_moment);
             selected = 5;
             busy = false;
         }
@@ -193,7 +205,7 @@
         {
             busy = true;
             header_name = "Unicorns";
-            results = StatsService.GetUnicornStats(momenta[0]);
+            results = StatsService.GetUnicornStats(selected_moment);
             selected = 6;
             busy = false;
         }
@@ -201,7 +213,7 @@
         {
             busy = true;
             header_name = "Bottom Fishers";
-            results = StatsService.GetFishStats(momenta[0]);
+            results = StatsService.GetFishStats(selected_moment);
             selected = 7;
             busy = false;
         }
@@ -209,7 +221,7 @@
         {
             busy = true;
             header_name = "Top drawers";
-            results = StatsService.GetDrawerStats(momenta[0]);
+            results = StatsService.GetDrawerStats(selected_moment);
             selected = 8;
             busy = false;
         }
@@ -217,7 +229,7 @@
         {
             busy = true;
             header_name = "Chasers";
-            results = StatsService.GetChaserStats(momenta[0]);
+            results = StatsService.GetChaserStats(selected_moment);
             selected = 9;
             busy = false;
         }
@@ -225,7 +237,7 @@
         {
             busy = true;
                 header_name = "Shimmers";
-            results = StatsService.GetShimmerStats(momenta[0]);
+            results = StatsService.GetShimmerStats(selected_moment);
             selected = 10;
             busy = false;
         }
