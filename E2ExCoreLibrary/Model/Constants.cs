@@ -7,7 +7,7 @@ namespace E2ExCoreLibrary.Model
     public static class Constants
     {
         public static List<string> RichCountries =
-            new List<string> { "US", "AU", "GB", };//"__", "HK", "AZ", "YT", "UA", "UG", "AE", "VE" };
+            new List<string> { "US", "AU", "GB", "GE", "KR", "CA", "CN", "FR", "NL", "IT", "__"};//"__", "HK", "AZ", "YT", "UA", "UG", "AE", "VE" };
         public static List<string> Countries = 
             new List<string> {  "__", "XX", "XY", "AE-AZ", "AF", "AE-AJ", "AX",
                                 "AL", "DZ", "AS", "AD", "AO", "AI", "AQ", "AG", "AR", "AM", "AW", "AU", "AT", "AZ", "BS", "BH", "BD", "BB",
